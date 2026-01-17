@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 18th Birthday Lala!</title>
     
-    <!-- Tailwind CSS untuk Styling Cepat -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Font Keren -->
@@ -13,10 +13,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <!-- Icon Library -->
+    <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Confetti Library -->
+    <!-- Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
@@ -39,14 +39,6 @@
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'bounce-slow': 'bounce 2s infinite',
                     },
-                    keyframes: {
-                        shake: {
-                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
-                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
-                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
-                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
-                        }
-                    }
                 }
             }
         }
@@ -62,23 +54,10 @@
 
         /* Glassmorphism Effect */
         .glass-card {
-            background: rgba(255, 255, 255, 0.8); /* Lebih solid dikit biar jelas */
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px; /* Height for horizontal scrollbar */
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ffb7c5;
-            border-radius: 10px;
         }
 
         /* Floating Photos Background Animation */
@@ -95,16 +74,15 @@
         .photo-particle {
             position: absolute;
             bottom: -100px;
-            /* Style biar fotonya bunder dan rapi */
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid rgba(255, 183, 197, 0.5);
-            opacity: 0.6; /* Transparan dikit biar estetik */
+            opacity: 0.6;
             animation: floatUp linear infinite;
         }
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; } /* Fade in pas muncul */
+            10% { opacity: 0.6; }
             100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
@@ -186,14 +164,6 @@
             opacity: 0;
         }
 
-        /* Modal Animation */
-        #wishModal {
-            transition: opacity 0.3s ease;
-        }
-        #wishModalContent {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
         /* Typewriter Cursor */
         .typewriter-cursor::after {
             content: '|';
@@ -224,8 +194,13 @@
 </head>
 <body class="text-gray-800" onmousemove="createTrail(event)">
 
-    <!-- Background Audio (Loaded via Config) -->
+    <!-- Background Audio -->
     <audio id="bgMusic" loop></audio>
+
+    <!-- Music Control Toggle -->
+    <button id="musicToggle" onclick="toggleMusic()" class="fixed top-4 right-4 z-[100] bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg text-deep-pink hover:scale-110 transition-transform hidden border border-pink-200">
+        <i data-lucide="music" class="w-6 h-6"></i>
+    </button>
 
     <!-- Floating Photos Container -->
     <div class="hearts-bg" id="heartsContainer"></div>
@@ -239,7 +214,6 @@
             <h1 class="font-hand text-3xl text-gray-700 mb-2">Hai Bebe! ❤️</h1>
             <p id="prankText" class="text-sm text-gray-500 mb-6">Aku punya kado nih, klik tombol di bawah ya!</p>
             
-            <!-- TOMBOL PRANK (Ditambah class duration-300 biar geraknya smooth) -->
             <button id="btnPrank" 
                 onmouseover="dodgeButton()" 
                 onclick="clickPrank()"
@@ -294,12 +268,12 @@
                 </h2>
                 <div class="relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-8">
                     <div class="absolute inset-0 bg-pink-300 rounded-full animate-pulse-slow blur-xl opacity-50"></div>
-                    <!-- HERO PHOTO -->
+                    <!-- HERO PHOTO (Diatur di Config bawah) -->
                     <img id="heroPhoto" src="" 
-                         alt="My Beautiful Lala" 
+                         alt="Birthday Girl" 
                          class="relative w-full h-full object-cover rounded-full border-4 border-white shadow-2xl">
                 </div>
-                <button onclick="scrollToMessage()" class="animate-bounce mt-4 text-gray-400">
+                <button onclick="scrollToMessage()" class="animate-bounce mt-4 text-gray-400 hover:text-deep-pink transition-colors">
                     <i data-lucide="chevron-down" class="w-8 h-8 mx-auto"></i>
                 </button>
             </div>
@@ -340,50 +314,16 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
             </div>
         </section>
 
-        <!-- BUCKET LIST SECTION -->
-        <section class="max-w-2xl mx-auto px-6 py-10 relative">
-            <h2 class="text-center font-hand text-4xl text-gray-700 mb-10 reveal">Misi & Harapan Tahun Ini 📝</h2>
-            
-            <div class="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-pink-200 reveal">
-                <ul class="space-y-6">
-                    <li class="flex items-center gap-4 group">
-                        <div class="w-8 h-8 rounded-full bg-pink-200 text-deep-pink flex items-center justify-center group-hover:bg-deep-pink group-hover:text-white transition-colors">
-                            <i data-lucide="check" class="w-5 h-5"></i>
-                        </div>
-                        <span class="text-lg text-gray-700 font-body">Rayain Ulang Tahun ke-18 🎂 (Done!)</span>
-                    </li>
-                    <li class="flex items-center gap-4 group">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center border-2 border-dashed border-gray-300">
-                            <i data-lucide="book-open" class="w-5 h-5"></i>
-                        </div>
-                        <span class="text-lg text-gray-600 font-body">Taklukin Soal-soal UTBK 📚</span>
-                    </li>
-                    <li class="flex items-center gap-4 group">
-                        <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center animate-pulse">
-                            <i data-lucide="star" class="w-5 h-5"></i>
-                        </div>
-                        <span class="text-xl font-bold text-deep-pink font-body">Lolos FK UI & Pake Jaket Kuning 🩺</span>
-                    </li>
-                    <li class="flex items-center gap-4 group">
-                        <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center">
-                            <i data-lucide="smile" class="w-5 h-5"></i>
-                        </div>
-                        <span class="text-lg text-gray-600 font-body">Bahagia Terus Sama Aku ❤️</span>
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Gallery Section (Compact Grid) -->
+        <!-- Gallery Section -->
         <section class="max-w-4xl mx-auto px-4 py-10">
             <h2 class="text-center font-hand text-4xl text-gray-700 mb-8 reveal">Our Memories 📸</h2>
             
-            <!-- Grid Layout: 2 kolom di HP, 3 kolom di Laptop -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+                
                 <!-- Foto 1 -->
                 <div class="reveal transition-delay-100">
-                    <div class="polaroid transform -rotate-2 hover:rotate-0 p-3 max-w-[160px] md:max-w-[200px]"> <!-- Ukuran Card Diperkecil -->
-                        <img id="galleryPhoto1" src="" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm"> <!-- Ukuran Foto Diperkecil -->
+                    <div class="polaroid transform -rotate-2 hover:rotate-0 p-3 max-w-[160px] md:max-w-[200px]">
+                        <img id="galleryPhoto1" src="" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm">
                         <p class="text-center font-hand text-gray-500 text-xs md:text-sm">Senyum kamu manis :)</p>
                     </div>
                 </div>
@@ -396,13 +336,18 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
                     </div>
                 </div>
 
-                <!-- Foto 3 -->
-                <div class="reveal transition-delay-300 md:col-span-1 col-span-2"> <!-- Di HP Foto ke-3 jadi di tengah bawah -->
+                <!-- VIDEO (Slot 3) -->
+                <div class="reveal transition-delay-300 md:col-span-1 col-span-2">
                     <div class="polaroid transform -rotate-1 hover:rotate-0 p-3 max-w-[160px] md:max-w-[200px] mx-auto">
-                        <img id="galleryPhoto3" src="" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm">
-                        <p class="text-center font-hand text-gray-500 text-xs md:text-sm">Love you ❤️</p>
+                        <!-- Disini tag VIDEO bukan IMG -->
+                        <video id="galleryVideo" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm" controls>
+                            <source src="" type="video/mp4">
+                            Browser kamu ga support video.
+                        </video>
+                        <p class="text-center font-hand text-gray-500 text-xs md:text-sm">Video Kita ❤️</p>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -423,7 +368,7 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
             </div>
         </section>
 
-        <!-- Love Meter -->
+        <!-- Love Meter Footer -->
         <footer class="text-center py-12 bg-white/30 backdrop-blur-sm mt-10 rounded-t-3xl">
             <h3 class="font-hand text-2xl text-gray-600 mb-4">Seberapa sayang sama aku? 🥰</h3>
             
@@ -457,27 +402,42 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
         </div>
     </div>
 
+    <!-- 🟢 SCRIPT KONFIGURASI 🟢 -->
+    <!-- BAGIAN INI YANG KAMU EDIT YA! -->
     <script>
-        // --- KONFIGURASI UTAMA ---
         const CONFIG = {
-            whatsappNumber: "6281234567890", 
-            musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", 
-            heroPhoto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60", 
+            // 🟢 1. GANTI NOMOR WA DISINI (Format 628xxx)
+            whatsappNumber: "6281213521181", 
             
+            // 🟢 2. GANTI MUSIK (Link URL atau Nama File)
+            // Kalau file MP3 ada di folder sama (upload ke GitHub), cukup tulis nama file: "lagu.mp3"
+            musicUrl: "", 
+            
+            // 🟢 3. GANTI FOTO UTAMA (YANG BULAT BESAR)
+            // Kalau file foto ada di folder sama, tulis nama file: "foto_utama.jpg"
+            heroPhoto: "1.jpg", 
+            
+            // 🟢 4. GANTI FOTO GALLERY (OUR MEMORIES)
+            // Bisa pakai link internet atau nama file lokal (misal: "foto1.jpg")
             galleryPhotos: [
-                "https://images.unsplash.com/photo-1516575334481-f85287c2c81d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                "2.jpeg", // Foto 1
+                "3.jpeg"  // Foto 2
             ],
+
+            // 🟢 5. GANTI VIDEO GALLERY (SLOT KE-3)
+            // Masukkan nama file video kamu yang sudah diupload, misal: "video_kita.mp4" 
+            galleryVideo: "4.mp4", 
             
+            // 🟢 6. GANTI FOTO-FOTO YANG MELAYANG DARI BAWAH
             floatingPhotos: [
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60',
-                'https://images.unsplash.com/photo-1516575334481-f85287c2c81d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60',
-                'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60',
-                'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60'
+                '1.jpg',
+                '1.jpg',
+                '1.jpg',
+                '1.jpg'
             ]
         };
 
+        // --- Logic System (JANGAN DIUBAH KECUALI PAHAM) ---
         function applyConfig() {
             document.getElementById('bgMusic').src = CONFIG.musicUrl;
             
@@ -486,17 +446,42 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
             
             const g1 = document.getElementById('galleryPhoto1');
             const g2 = document.getElementById('galleryPhoto2');
-            const g3 = document.getElementById('galleryPhoto3');
+            const gVid = document.getElementById('galleryVideo');
             
             if(g1) g1.src = CONFIG.galleryPhotos[0];
             if(g2) g2.src = CONFIG.galleryPhotos[1];
-            if(g3) g3.src = CONFIG.galleryPhotos[2];
+            
+            // Set Video Source
+            if(gVid) {
+                gVid.src = CONFIG.galleryVideo;
+                gVid.load(); // Reload video element
+            }
         }
         applyConfig();
 
         lucide.createIcons();
         const audio = document.getElementById('bgMusic');
         audio.volume = 0.5;
+
+        // Music Toggle Logic
+        let isMusicPlaying = true;
+        function toggleMusic() {
+            const btn = document.getElementById('musicToggle');
+            const icon = btn.querySelector('i');
+            
+            if (isMusicPlaying) {
+                audio.pause();
+                isMusicPlaying = false;
+                btn.innerHTML = '<i data-lucide="mic-off" class="w-6 h-6"></i>'; 
+                btn.classList.add('opacity-50');
+            } else {
+                audio.play();
+                isMusicPlaying = true;
+                btn.innerHTML = '<i data-lucide="music" class="w-6 h-6"></i>';
+                btn.classList.remove('opacity-50');
+            }
+            lucide.createIcons();
+        }
 
         // Magic Cursor
         function createTrail(e) {
@@ -511,7 +496,7 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
             setTimeout(() => { trail.remove(); }, 1000);
         }
 
-        // --- PRANK LOGIC (HP & LAPTOP SAFE) ---
+        // --- PRANK LOGIC ---
         let dodgeCount = 0;
         const maxDodges = 3; 
         const btnPrank = document.getElementById('btnPrank');
@@ -545,30 +530,24 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
                 
                 dodgeCount++;
             } else {
-                // FASE NYERAH: Balikin ke tengah, diem, dan tunggu klik terakhir
                 btnPrank.style.position = 'static'; 
                 btnPrank.style.margin = '0 auto'; 
                 btnPrank.style.transform = 'none';
                 document.getElementById('btnText').innerText = "Yaudah iya klik 🥺";
                 document.getElementById('prankText').innerText = "Capek lari terus, sok atuh dibuka...";
-                
-                // PENTING: Increment sekali lagi biar logika clickPrank tau ini udah kelar
                 dodgeCount++; 
             }
         }
 
         function clickPrank() {
-            // Kita pakai <= karena saat count == maxDodges, kita mau dia masuk ke fase "Yaudah iya klik" dulu
             if (dodgeCount <= maxDodges) {
                 dodgeButton();
             } else {
-                // HANYA PINDAH HALAMAN KALAU SUDAH LEBIH DARI MAXDODGES (Artinya udah fase nyerah)
                 document.getElementById('prankPhase').style.display = 'none';
                 document.getElementById('loveQuestionPhase').classList.remove('hidden');
             }
         }
 
-        // --- LOVE QUESTION LOGIC ---
         function teaseNoLove() {
             const btnNo = document.getElementById('btnNoLove');
             btnNo.innerText = "Gabisa wlee 😜";
@@ -591,14 +570,22 @@ Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. S
         function startExperience() {
             const overlay = document.getElementById('overlay');
             const mainContent = document.getElementById('mainContent');
+            const musicBtn = document.getElementById('musicToggle');
 
             overlay.style.opacity = '0';
             
-            audio.play().catch(error => { console.log("Audio autoplay blocked"); });
+            audio.play().catch(error => { 
+                console.log("Audio autoplay blocked, waiting for user interaction");
+                isMusicPlaying = false;
+                musicBtn.innerHTML = '<i data-lucide="mic-off" class="w-6 h-6"></i>';
+                musicBtn.classList.add('opacity-50');
+                lucide.createIcons();
+            });
 
             setTimeout(() => {
                 overlay.style.display = 'none';
                 mainContent.classList.remove('hidden');
+                musicBtn.classList.remove('hidden');
                 
                 setTimeout(() => {
                     mainContent.classList.remove('opacity-0');
