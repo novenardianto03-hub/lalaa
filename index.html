@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 18th Birthday Lala!</title>
+    
+    <!-- Tailwind CSS untuk Styling Cepat -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Keren -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Icon Library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'love-pink': '#FFB7C5',
+                        'deep-pink': '#FF69B4',
+                        'pastel-pink': '#FCE7F3',
+                    },
+                    fontFamily: {
+                        'hand': ['Pacifico', 'cursive'],
+                        'body': ['Poppins', 'sans-serif'],
+                        'script': ['Great Vibes', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'bounce-slow': 'bounce 2s infinite',
+                    },
+                    keyframes: {
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff0f5;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8); /* Lebih solid dikit biar jelas */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px; /* Height for horizontal scrollbar */
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb7c5;
+            border-radius: 10px;
+        }
+
+        /* Floating Photos Background Animation */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .photo-particle {
+            position: absolute;
+            bottom: -100px;
+            /* Style biar fotonya bunder dan rapi */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 183, 197, 0.5);
+            opacity: 0.6; /* Transparan dikit biar estetik */
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; } /* Fade in pas muncul */
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Polaroid Style */
+        .polaroid {
+            background: white;
+            padding: 10px;
+            padding-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .polaroid:hover {
+            transform: scale(1.05) rotate(1deg);
+            z-index: 10;
+        }
+
+        /* Candle Animation CSS */
+        .candle-container {
+            position: relative;
+            width: 60px;
+            height: 100px;
+            margin: 0 auto 20px auto;
+        }
+        .candle-wax {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80%;
+            background: linear-gradient(#fce7f3, #ffb7c5);
+            border-radius: 8px;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        .candle-wick {
+            position: absolute;
+            bottom: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 15px;
+            background: #666;
+            z-index: 0;
+        }
+        .candle-flame {
+            position: absolute;
+            bottom: 90%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 35px;
+            background: linear-gradient(#fff, #ffae00, #ff5e00);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px #ffae00, 0 0 20px #ffae00, 0 0 40px #ffae00;
+            animation: flicker 1s infinite alternate;
+            transform-origin: bottom center;
+            opacity: 1;
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+        
+        @keyframes flicker {
+            0% { transform: translateX(-50%) skewX(2deg) scaleY(1); }
+            50% { transform: translateX(-50%) skewX(-2deg) scaleY(1.1); }
+            100% { transform: translateX(-50%) skewX(1deg) scaleY(0.9); }
+        }
+
+        .candle-flame.out {
+            transform: translateX(-50%) scale(0);
+            opacity: 0;
+        }
+
+        /* Modal Animation */
+        #wishModal {
+            transition: opacity 0.3s ease;
+        }
+        #wishModalContent {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Typewriter Cursor */
+        .typewriter-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #FF69B4;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Magic Cursor */
+        .trail-particle {
+            position: fixed;
+            pointer-events: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #FF69B4;
+            animation: fadeOut 1s forwards;
+            z-index: 9999;
+        }
+        @keyframes fadeOut {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; top: -20px; }
+        }
+    </style>
+</head>
+<body class="text-gray-800" onmousemove="createTrail(event)">
+
+    <!-- Background Audio (Loaded via Config) -->
+    <audio id="bgMusic" loop></audio>
+
+    <!-- Floating Photos Container -->
+    <div class="hearts-bg" id="heartsContainer"></div>
+
+    <!-- Opening Overlay -->
+    <div id="overlay" class="fixed inset-0 z-50 bg-pink-100 flex flex-col items-center justify-center transition-opacity duration-1000 overflow-hidden">
+        
+        <!-- Phase 1: Prank Button -->
+        <div id="prankPhase" class="text-center p-6 glass-card rounded-3xl shadow-xl max-w-sm mx-4 animate-float relative z-10 transition-all duration-500">
+            <i data-lucide="gift" class="w-16 h-16 text-deep-pink mx-auto mb-4"></i>
+            <h1 class="font-hand text-3xl text-gray-700 mb-2">Hai Bebe! ❤️</h1>
+            <p id="prankText" class="text-sm text-gray-500 mb-6">Aku punya kado nih, klik tombol di bawah ya!</p>
+            
+            <!-- TOMBOL PRANK (Ditambah class duration-300 biar geraknya smooth) -->
+            <button id="btnPrank" 
+                onmouseover="dodgeButton()" 
+                onclick="clickPrank()"
+                class="bg-deep-pink text-white px-8 py-3 rounded-full font-bold shadow-lg transition-all duration-300 ease-out flex items-center gap-2 mx-auto relative z-20">
+                <i data-lucide="play-circle" class="w-5 h-5"></i> <span id="btnText">Buka Sekarang</span>
+            </button>
+        </div>
+
+        <!-- Phase 2: Love Question -->
+        <div id="loveQuestionPhase" class="hidden text-center p-6 glass-card rounded-3xl shadow-xl max-w-sm mx-4 animate-float">
+            <h1 class="font-hand text-3xl text-deep-pink mb-6">Kamu sayang ga sama aku? 🥺</h1>
+            
+            <div class="flex flex-col gap-4">
+                <button onclick="answerLove(true)" class="bg-deep-pink text-white px-8 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                    <i data-lucide="heart" class="w-5 h-5 fill-current"></i> Aku Sayang Kamu!
+                </button>
+                
+                <button id="btnNoLove" 
+                    onmouseover="teaseNoLove()" 
+                    onclick="teaseNoLove()"
+                    class="bg-gray-200 text-gray-500 px-8 py-3 rounded-full font-bold shadow-inner cursor-not-allowed transition-all">
+                    Aku ga sayang kamu
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 3: Confirmation -->
+        <div id="confirmPhase" class="hidden text-center p-6 glass-card rounded-3xl shadow-xl max-w-sm mx-4 animate-float">
+            <h1 class="font-hand text-4xl text-deep-pink mb-4">Udah Siap? 🫣</h1>
+            <p class="text-gray-500 mb-8">Tarik napas dulu... Kado spesial buat kamu.</p>
+            <button onclick="startExperience()" class="bg-gradient-to-r from-love-pink to-deep-pink text-white text-xl px-12 py-4 rounded-full font-bold shadow-xl hover:scale-110 transition-transform duration-300 ring-4 ring-pink-200">
+                SIAP BANGET! 🚀
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen pb-20 relative">
+        
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative">
+            <div class="reveal">
+                <span class="inline-block py-1 px-3 rounded-full bg-pink-200 text-pink-700 text-sm font-semibold mb-4 tracking-wide">
+                    18 Januari 2026
+                </span>
+                <h1 class="font-script text-6xl md:text-8xl text-deep-pink mb-4 drop-shadow-sm leading-tight">
+                    Happy 18th Birthday Lala!
+                </h1>
+                <h2 class="font-body text-xl md:text-3xl text-gray-600 mb-8">
+                    Bebe Kesayangan Aku ✨
+                </h2>
+                <div class="relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-8">
+                    <div class="absolute inset-0 bg-pink-300 rounded-full animate-pulse-slow blur-xl opacity-50"></div>
+                    <!-- HERO PHOTO -->
+                    <img id="heroPhoto" src="" 
+                         alt="My Beautiful Lala" 
+                         class="relative w-full h-full object-cover rounded-full border-4 border-white shadow-2xl">
+                </div>
+                <button onclick="scrollToMessage()" class="animate-bounce mt-4 text-gray-400">
+                    <i data-lucide="chevron-down" class="w-8 h-8 mx-auto"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Message Section -->
+        <section id="messageSection" class="max-w-3xl mx-auto px-6 py-20">
+            <div class="glass-card rounded-3xl p-8 md:p-12 shadow-xl reveal border-l-4 border-deep-pink relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 text-pink-100 opacity-50">
+                    <i data-lucide="heart" class="w-48 h-48 fill-current"></i>
+                </div>
+                
+                <h3 class="font-hand text-3xl text-gray-800 mb-6 relative z-10">Dear Lala (Bebe)...</h3>
+                
+                <!-- TYPEWRITER CONTAINER -->
+                <div class="prose prose-pink text-gray-600 leading-relaxed relative z-10 font-body">
+                    <p id="typewriterText" class="min-h-[300px] whitespace-pre-line"></p>
+                </div>
+
+                <!-- Hidden Source Text for Typewriter -->
+                <div id="sourceText" class="hidden">
+Happy 18th Birthday, Bebe! ❤️ Selamat datang di usia dewasa.
+
+Soal eligible kemarin, udah ya jangan dipikirin lagi. Itu bukan berarti kamu gagal kok. Aku yakin banget Tuhan lagi nyiapin skenario terbaik buat kamu masuk FK UI lewat jalur UTBK. Justru karena jalannya terjal, nanti pas nyampe puncak rasanya bakal jauh lebih manis.
+
+Doa aku di ulang tahun kamu ini spesifik banget: <strong>Semoga tahun ini bener-bener jadi tahunnya kamu. Tahun di mana kamu bisa "menang" dan dapetin apa yang selama ini kamu impikan.</strong> Jaga kesehatan fisik dan mental kamu ya sayang, jangan diforsir banget, perjalanan masih panjang.
+
+Maaf ya kalau aku belum bisa kasih kado fisik yang mewah atau spesial kayak pasangan lain di luar sana. Aku cuma bisa kasih ucapan sederhana ini lewat web yang aku buat sendiri. Tapi satu hal yang pasti, kado terbesarku buat kamu adalah kehadiran aku di sini. Aku siap jadi "kado" hidup yang selalu ada buat nemenin, ngejagain, dan dukung kamu kapanpun.
+
+Inget, kamu gak sendirian. Kalo capek, ada aku tempat kamu bersandar. Kita berjuang bareng-bareng ya, sampe cita-cita kamu jadi Dokter tercapai dan kita bisa liat kamu pake jaket kuning kebanggaan itu.
+
+Selamat ulang tahun calon Bu Dokter hebat. Aku bangga banget sama proses kamu. Sayang kamu banyak-banyak! 🚀
+                </div>
+
+                <div class="mt-8 text-right font-hand text-xl text-deep-pink reveal transition-delay-500">
+                    - Calon Pasien Pertamamu 🩺
+                </div>
+            </div>
+        </section>
+
+        <!-- BUCKET LIST SECTION -->
+        <section class="max-w-2xl mx-auto px-6 py-10 relative">
+            <h2 class="text-center font-hand text-4xl text-gray-700 mb-10 reveal">Misi & Harapan Tahun Ini 📝</h2>
+            
+            <div class="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-pink-200 reveal">
+                <ul class="space-y-6">
+                    <li class="flex items-center gap-4 group">
+                        <div class="w-8 h-8 rounded-full bg-pink-200 text-deep-pink flex items-center justify-center group-hover:bg-deep-pink group-hover:text-white transition-colors">
+                            <i data-lucide="check" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-lg text-gray-700 font-body">Rayain Ulang Tahun ke-18 🎂 (Done!)</span>
+                    </li>
+                    <li class="flex items-center gap-4 group">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center border-2 border-dashed border-gray-300">
+                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-lg text-gray-600 font-body">Taklukin Soal-soal UTBK 📚</span>
+                    </li>
+                    <li class="flex items-center gap-4 group">
+                        <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center animate-pulse">
+                            <i data-lucide="star" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xl font-bold text-deep-pink font-body">Lolos FK UI & Pake Jaket Kuning 🩺</span>
+                    </li>
+                    <li class="flex items-center gap-4 group">
+                        <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center">
+                            <i data-lucide="smile" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-lg text-gray-600 font-body">Bahagia Terus Sama Aku ❤️</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Gallery Section (Compact Grid) -->
+        <section class="max-w-4xl mx-auto px-4 py-10">
+            <h2 class="text-center font-hand text-4xl text-gray-700 mb-8 reveal">Our Memories 📸</h2>
+            
+            <!-- Grid Layout: 2 kolom di HP, 3 kolom di Laptop -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+                <!-- Foto 1 -->
+                <div class="reveal transition-delay-100">
+                    <div class="polaroid transform -rotate-2 hover:rotate-0 p-3 max-w-[160px] md:max-w-[200px]"> <!-- Ukuran Card Diperkecil -->
+                        <img id="galleryPhoto1" src="" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm"> <!-- Ukuran Foto Diperkecil -->
+                        <p class="text-center font-hand text-gray-500 text-xs md:text-sm">Senyum kamu manis :)</p>
+                    </div>
+                </div>
+
+                <!-- Foto 2 -->
+                <div class="reveal transition-delay-200">
+                    <div class="polaroid transform rotate-2 hover:rotate-0 p-3 max-w-[160px] md:max-w-[200px]">
+                        <img id="galleryPhoto2" src="" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm">
+                        <p class="text-center font-hand text-gray-500 text-xs md:text-sm">18 Tahun!</p>
+                    </div>
+                </div>
+
+                <!-- Foto 3 -->
+                <div class="reveal transition-delay-300 md:col-span-1 col-span-2"> <!-- Di HP Foto ke-3 jadi di tengah bawah -->
+                    <div class="polaroid transform -rotate-1 hover:rotate-0 p-3 max-w-[160px] md:max-w-[200px] mx-auto">
+                        <img id="galleryPhoto3" src="" class="w-full h-32 md:h-40 object-cover mb-2 rounded-sm">
+                        <p class="text-center font-hand text-gray-500 text-xs md:text-sm">Love you ❤️</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wishes Interactive Section -->
+        <section class="py-20 text-center px-4 relative">
+            <div class="reveal">
+                <h2 class="font-hand text-3xl mb-8 text-gray-700">Make a Wish & Blow the Candle! ✨</h2>
+                
+                <div class="candle-container">
+                    <div class="candle-flame" id="candleFlame"></div>
+                    <div class="candle-wick"></div>
+                    <div class="candle-wax"></div>
+                </div>
+
+                <button onclick="makeAWish()" id="btnWish" class="bg-gradient-to-r from-love-pink to-deep-pink text-white text-lg px-10 py-4 rounded-full shadow-lg transform transition hover:scale-105 hover:shadow-2xl font-bold">
+                    Tiup Lilinnya 🎂
+                </button>
+            </div>
+        </section>
+
+        <!-- Love Meter -->
+        <footer class="text-center py-12 bg-white/30 backdrop-blur-sm mt-10 rounded-t-3xl">
+            <h3 class="font-hand text-2xl text-gray-600 mb-4">Seberapa sayang sama aku? 🥰</h3>
+            
+            <div class="max-w-xs mx-auto bg-gray-200 rounded-full h-6 mb-6 overflow-hidden border border-pink-200 relative shadow-inner">
+                <div id="loveMeterBar" class="bg-gradient-to-r from-pink-300 to-deep-pink h-full rounded-full transition-all duration-300 w-0 flex items-center justify-center">
+                    <span id="lovePercent" class="text-white text-xs font-bold px-2 hidden">0%</span>
+                </div>
+            </div>
+
+            <button onclick="fillLove()" id="btnFillLove" class="bg-white text-deep-pink border-2 border-deep-pink px-8 py-3 rounded-full font-bold shadow-md hover:bg-pink-50 active:scale-95 transition-transform flex items-center gap-2 mx-auto">
+                <i data-lucide="heart" class="w-5 h-5 fill-current"></i> Tekan Terus!
+            </button>
+            
+            <p id="loveMessage" class="mt-4 text-gray-500 text-sm h-6 opacity-0 transition-opacity">Ayo penuhin cintanya! 👆</p>
+        </footer>
+
+    </main>
+
+    <!-- Custom Wish Modal -->
+    <div id="wishModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="wishModalContent" class="glass-card bg-white/90 p-8 rounded-3xl max-w-sm mx-4 text-center transform scale-50 transition-transform duration-300 shadow-2xl border-2 border-pink-200">
+            <div class="mb-4 text-5xl">🎉✨</div>
+            <h3 class="font-hand text-3xl text-deep-pink mb-4">Yeaaay!</h3>
+            <p class="text-gray-600 mb-6 font-body leading-relaxed">
+                Semoga semua harapan baik kamu dikabulkan Tuhan. <br>
+                Happy Birthday sayang! I love you! ❤️
+            </p>
+            <button onclick="closeModal()" class="bg-deep-pink text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-pink-600 transition-colors">
+                Aamiin!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- KONFIGURASI UTAMA ---
+        const CONFIG = {
+            whatsappNumber: "6281234567890", 
+            musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", 
+            heroPhoto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60", 
+            
+            galleryPhotos: [
+                "https://images.unsplash.com/photo-1516575334481-f85287c2c81d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            ],
+            
+            floatingPhotos: [
+                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60',
+                'https://images.unsplash.com/photo-1516575334481-f85287c2c81d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60',
+                'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60',
+                'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60'
+            ]
+        };
+
+        function applyConfig() {
+            document.getElementById('bgMusic').src = CONFIG.musicUrl;
+            
+            const heroImg = document.getElementById('heroPhoto');
+            if(heroImg) heroImg.src = CONFIG.heroPhoto;
+            
+            const g1 = document.getElementById('galleryPhoto1');
+            const g2 = document.getElementById('galleryPhoto2');
+            const g3 = document.getElementById('galleryPhoto3');
+            
+            if(g1) g1.src = CONFIG.galleryPhotos[0];
+            if(g2) g2.src = CONFIG.galleryPhotos[1];
+            if(g3) g3.src = CONFIG.galleryPhotos[2];
+        }
+        applyConfig();
+
+        lucide.createIcons();
+        const audio = document.getElementById('bgMusic');
+        audio.volume = 0.5;
+
+        // Magic Cursor
+        function createTrail(e) {
+            const trail = document.createElement('div');
+            trail.className = 'trail-particle';
+            const colors = ['#FF69B4', '#FFB7C5', '#FCE7F3', '#FFD700'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            trail.style.backgroundColor = randomColor;
+            trail.style.left = e.pageX + 'px';
+            trail.style.top = e.pageY + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => { trail.remove(); }, 1000);
+        }
+
+        // --- PRANK LOGIC (HP & LAPTOP SAFE) ---
+        let dodgeCount = 0;
+        const maxDodges = 3; 
+        const btnPrank = document.getElementById('btnPrank');
+        const prankContainer = document.getElementById('prankPhase'); 
+
+        function dodgeButton() {
+            if (dodgeCount < maxDodges) {
+                if (btnPrank.style.position !== 'absolute') {
+                    prankContainer.style.height = prankContainer.offsetHeight + 'px';
+                }
+
+                const containerWidth = prankContainer.clientWidth;
+                const containerHeight = prankContainer.clientHeight;
+                const btnWidth = btnPrank.offsetWidth || 150;
+                const btnHeight = btnPrank.offsetHeight || 50;
+                const margin = 20; 
+
+                const maxLeft = Math.max(0, containerWidth - btnWidth - margin);
+                const maxTop = Math.max(0, containerHeight - btnHeight - margin);
+
+                const newLeft = Math.floor(Math.random() * maxLeft) + margin;
+                const newTop = Math.floor(Math.random() * maxTop) + margin;
+
+                btnPrank.style.position = 'absolute';
+                btnPrank.style.left = newLeft + 'px';
+                btnPrank.style.top = newTop + 'px';
+                btnPrank.style.margin = '0'; 
+                
+                const texts = ["Eits gak kena! 😝", "Sekali lagi dong :p", "Ayo kejar! 🏃‍♀️"];
+                document.getElementById('btnText').innerText = texts[dodgeCount];
+                
+                dodgeCount++;
+            } else {
+                // FASE NYERAH: Balikin ke tengah, diem, dan tunggu klik terakhir
+                btnPrank.style.position = 'static'; 
+                btnPrank.style.margin = '0 auto'; 
+                btnPrank.style.transform = 'none';
+                document.getElementById('btnText').innerText = "Yaudah iya klik 🥺";
+                document.getElementById('prankText').innerText = "Capek lari terus, sok atuh dibuka...";
+                
+                // PENTING: Increment sekali lagi biar logika clickPrank tau ini udah kelar
+                dodgeCount++; 
+            }
+        }
+
+        function clickPrank() {
+            // Kita pakai <= karena saat count == maxDodges, kita mau dia masuk ke fase "Yaudah iya klik" dulu
+            if (dodgeCount <= maxDodges) {
+                dodgeButton();
+            } else {
+                // HANYA PINDAH HALAMAN KALAU SUDAH LEBIH DARI MAXDODGES (Artinya udah fase nyerah)
+                document.getElementById('prankPhase').style.display = 'none';
+                document.getElementById('loveQuestionPhase').classList.remove('hidden');
+            }
+        }
+
+        // --- LOVE QUESTION LOGIC ---
+        function teaseNoLove() {
+            const btnNo = document.getElementById('btnNoLove');
+            btnNo.innerText = "Gabisa wlee 😜";
+            btnNo.classList.add('animate-shake');
+            setTimeout(() => {
+                btnNo.innerText = "Aku ga sayang kamu";
+                btnNo.classList.remove('animate-shake');
+            }, 1000);
+        }
+
+        function answerLove(isYes) {
+            if (isYes) {
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 }, colors: ['#FF69B4', '#FFB7C5'] });
+                document.getElementById('loveQuestionPhase').style.display = 'none';
+                document.getElementById('confirmPhase').classList.remove('hidden');
+            }
+        }
+
+        // Entrance Animation
+        function startExperience() {
+            const overlay = document.getElementById('overlay');
+            const mainContent = document.getElementById('mainContent');
+
+            overlay.style.opacity = '0';
+            
+            audio.play().catch(error => { console.log("Audio autoplay blocked"); });
+
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                mainContent.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    mainContent.classList.remove('opacity-0');
+                    triggerConfetti();
+                    reveal(); 
+                }, 50);
+            }, 1000);
+        }
+
+        function scrollToMessage() {
+            document.getElementById('messageSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function triggerConfetti() {
+            const duration = 3000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            const random = (min, max) => Math.random() * (max - min) + min;
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#ffb7c5', '#ff69b4', '#ffffff'] }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#ffb7c5', '#ff69b4', '#ffffff'] }));
+            }, 250);
+        }
+
+        // Typewriter
+        const sourceText = document.getElementById('sourceText').innerHTML.trim();
+        const typewriterElement = document.getElementById('typewriterText');
+        let i = 0;
+        let isTyping = false;
+
+        function typeWriter() {
+            if (i < sourceText.length) {
+                const char = sourceText.charAt(i);
+                if (char === '<') {
+                    const closingTagIndex = sourceText.indexOf('>', i);
+                    if (closingTagIndex !== -1) {
+                        typewriterElement.innerHTML += sourceText.substring(i, closingTagIndex + 1);
+                        i = closingTagIndex + 1;
+                        setTimeout(typeWriter, 10); 
+                        return;
+                    }
+                }
+                typewriterElement.innerHTML += char;
+                i++;
+                setTimeout(typeWriter, 10); 
+            } else {
+                typewriterElement.classList.remove('typewriter-cursor');
+            }
+        }
+
+        function reveal() {
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent.classList.contains('hidden')) return; 
+
+            var reveals = document.querySelectorAll(".reveal");
+            for (var j = 0; j < reveals.length; j++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[j].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[j].classList.add("active");
+                }
+            }
+
+            const messageSection = document.getElementById('messageSection');
+            const rect = messageSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 200 && !isTyping) {
+                isTyping = true;
+                typewriterElement.classList.add('typewriter-cursor');
+                typeWriter();
+            }
+        }
+        window.addEventListener("scroll", reveal);
+
+        // Wish Logic
+        function makeAWish() {
+            const flame = document.getElementById('candleFlame');
+            flame.classList.add('out');
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#FF69B4', '#FFB7C5', '#FFD700'] });
+            setTimeout(() => { showModal(); }, 800);
+        }
+
+        function showModal() {
+            const modal = document.getElementById('wishModal');
+            const content = document.getElementById('wishModalContent');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            content.classList.remove('scale-50');
+            content.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('wishModal');
+            const content = document.getElementById('wishModalContent');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-50');
+            setTimeout(() => { modal.classList.add('pointer-events-none'); }, 300);
+        }
+
+        // Love Meter
+        let loveLevel = 0;
+        function fillLove() {
+            const bar = document.getElementById('loveMeterBar');
+            const text = document.getElementById('lovePercent');
+            const msg = document.getElementById('loveMessage');
+            const btn = document.getElementById('btnFillLove');
+
+            if (loveLevel < 100) {
+                loveLevel += 10;
+                bar.style.width = loveLevel + '%';
+                text.innerText = loveLevel + '%';
+                text.classList.remove('hidden');
+                msg.style.opacity = '1';
+                
+                const msgs = ["Lagi...", "Terus...", "Dikit lagi...", "Ayo sayang!", "Hampir full!"];
+                msg.innerText = msgs[Math.min(Math.floor(loveLevel/20), 4)];
+                confetti({ particleCount: 15, spread: 40, origin: { y: 0.9 }, colors: ['#FF69B4', '#FFB7C5'], shapes: ['heart'] });
+            } 
+            
+            if (loveLevel >= 100) {
+                loveLevel = 100;
+                msg.innerText = "I LOVE YOU FULL! ❤️❤️❤️";
+                msg.classList.add('font-bold', 'text-deep-pink', 'text-lg');
+                
+                btn.innerHTML = '<i data-lucide="message-circle" class="w-5 h-5"></i> Kirim Pesan ke Aku';
+                btn.onclick = function() {
+                    const message = encodeURIComponent("Makasih yaa bebe web nya bagus banget, I love you! ❤️");
+                    window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${message}`, '_blank');
+                };
+                btn.classList.remove('bg-white', 'text-deep-pink');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600', 'hover:bg-green-600', 'animate-bounce-slow');
+                
+                lucide.createIcons();
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.8 }, colors: ['#FF69B4', '#FF0000', '#FFFFFF'], shapes: ['heart'], scalar: 2 });
+            }
+        }
+
+        // Floating Photos
+        function createFloatingPhotos() {
+            const container = document.getElementById('heartsContainer');
+            const photoCount = 15;
+            const photos = CONFIG.floatingPhotos;
+
+            for (let i = 0; i < photoCount; i++) {
+                const photo = document.createElement('img');
+                photo.src = photos[Math.floor(Math.random() * photos.length)];
+                photo.classList.add('photo-particle'); 
+                
+                const size = Math.random() * 30 + 30; 
+                photo.style.width = size + 'px';
+                photo.style.height = size + 'px';
+                photo.style.left = Math.random() * 100 + 'vw';
+                photo.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                photo.style.animationDelay = Math.random() * 5 + 's';
+                
+                container.appendChild(photo);
+            }
+        }
+        createFloatingPhotos();
+    </script>
+</body>
+</html>
